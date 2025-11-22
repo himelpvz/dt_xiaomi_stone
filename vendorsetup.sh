@@ -1,10 +1,10 @@
-# Android device tree for Redmi Redmi Note 12 5G (stone)
-
-```
 #
 # Copyright (C) 2025 The Android Open Source Project
 # Copyright (C) 2025 SebaUbuntu's TWRP device tree generator
 #
 # SPDX-License-Identifier: Apache-2.0
 #
-```
+
+add_lunch_combo omni_stone-user
+add_lunch_combo omni_stone-userdebug
+add_lunch_combo omni_stone-eng
