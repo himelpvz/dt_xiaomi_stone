@@ -15,7 +15,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 $(call inherit-product, vendor/twrp/config/common.mk)
 
 # Inherit from stone device
-$(call inherit-product, $(DEVICE_PATH)device.mk)
+$(call inherit-product, $(DEVICE_PATH)/device.mk)
 
 PRODUCT_DEVICE := stone
 PRODUCT_NAME := twrp_stone
