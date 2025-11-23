@@ -6,5 +6,3 @@
 #
 
 add_lunch_combo twrp_stone-user
-add_lunch_combo twrp_stone-userdebug
-add_lunch_combo twrp_stone-eng

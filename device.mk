@@ -24,6 +24,21 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 # Configure twrp
 $(call inherit-product, vendor/twrp/config/common.mk)
 
+# Требуеться для firstage -------------------------------#
+PRODUCT_PACKAGES += linker.vendor_ramdisk                #
+PRODUCT_PACKAGES += linker_hwasan64.vendor_ramdisk       #
+PRODUCT_PACKAGES += resize2fs.vendor_ramdisk             #
+PRODUCT_PACKAGES += resize.f2fs.vendor_ramdisk           #
+PRODUCT_PACKAGES += dump.f2fs.vendor_ramdisk             #
+PRODUCT_PACKAGES += defrag.f2fs.vendor_ramdisk           #
+PRODUCT_PACKAGES += fsck.vendor_ramdisk                  #
+PRODUCT_PACKAGES += tune2fs.vendor_ramdisk               #
+PRODUCT_PACKAGES += fstab.zuma.vendor_ramdisk            #
+PRODUCT_PACKAGES += fstab.zuma-fips.vendor_ramdisk       #
+PRODUCT_PACKAGES += e2fsck.vendor_ramdisk                #
+# Требуеться для firstage -------------------------------#
+
+
 # A/B
 AB_OTA_POSTINSTALL_CONFIG += \
     RUN_POSTINSTALL_system=true \
@@ -33,6 +48,18 @@ AB_OTA_POSTINSTALL_CONFIG += \
 
 PRODUCT_PACKAGES += \
     otapreopt_script
+    
+PRODUCT_PACKAGES += \
+    vndservicemanager
+    
+PRODUCT_PACKAGES += \
+    vndservice
+    
+# Hindl
+
+PRODUCT_PACKAGES += \
+    libhidltransport.vendor \
+    libhwbinder.vendor
 
 # Bootctrl
 PRODUCT_PACKAGES += \
@@ -79,7 +106,8 @@ PRODUCT_PACKAGES_DEBUG += \
 
 # Soong Namespaces : Qcom commonsys Display
 PRODUCT_SOONG_NAMESPACES += \
-    vendor/qcom/opensource/commonsys-intf/display
+    vendor/qcom/opensource/commonsys-intf/display \
+    $(DEVICE_PATH) 
 
 # Misc.
 TARGET_RECOVERY_DEVICE_MODULES += \
@@ -88,6 +116,12 @@ TARGET_RECOVERY_DEVICE_MODULES += \
     vendor.display.config@1.0 \
     vendor.display.config@2.0 \
     libdisplayconfig.qti 
+    
+    
+# TWRP haptic feedback 
+
+TW_SUPPORT_INPUT_AIDL_HAPTICS := true
+
 
 RECOVERY_LIBRARY_SOURCE_FILES += \
     $(TARGET_OUT_SHARED_LIBRARIES)/libion.so \
