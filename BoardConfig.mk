@@ -100,7 +100,8 @@ TARGET_KERNEL_SOURCE := kernel/xiaomi/stone
 # Kernel - prebuilt
 
 # TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/kernel
-TARGET_PREBUILT_DTB := $(DEVICE_PATH)/prebuilt/dtb
+# TARGET_PREBUILT_DTB := $(DEVICE_PATH)/prebuilt/dtb
+BOARD_PREBUILT_DTBIMAGE_DIR := $(DEVICE_PATH)/prebuilt
 
 # Partitions
 BOARD_FLASH_BLOCK_SIZE := 262144 # (BOARD_KERNEL_PAGESIZE * 64)
@@ -117,7 +118,7 @@ BOARD_XIAOMI_DYNAMIC_PARTITIONS_SIZE := 9122611200 # TODO: Fix hardcoded value
 # ===============
 # BOOTIMG 
 # ===============
-#BOARD_USES_RECOVERY_AS_BOOT := true        (use if need to build boot.img)
+# BOARD_USES_RECOVERY_AS_BOOT := true        (use if need to build boot.img)
 
 BOARD_MKBOOTIMG_ARGS += --dtb $(TARGET_PREBUILT_DTB)
 BOARD_INCLUDE_DTB_IN_BOOTIMG := true
