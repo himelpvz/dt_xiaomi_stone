@@ -9,7 +9,7 @@ DEVICE_PATH := device/xiaomi/stone
 
 # For building with minimal manifest
 ALLOW_MISSING_DEPENDENCIES := true
-BOARD_USES_RECOVERY_AS_BOOT := true
+#BOARD_USES_RECOVERY_AS_BOOT := true
 # A/B
 AB_OTA_UPDATER := true
 AB_OTA_PARTITIONS += \
