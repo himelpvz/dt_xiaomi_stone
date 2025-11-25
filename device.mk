@@ -5,43 +5,46 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-LOCAL_PATH := device/xiaomi/stone
-# Configure base.mk
+DEVICE_PATH := device/xiaomi/stone
+
+# Base product configuration
 $(call inherit-product, $(SRC_TARGET_DIR)/product/base.mk)
 
-# Configure core_64_bit_only.mk
+# 64-bit only configuration (defines ro.zygote=zygote64)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
 
-# Configure gsi_keys.mk
+# GSI keys
 $(call inherit-product, $(SRC_TARGET_DIR)/product/gsi_keys.mk)
 
-# Configure Virtual A/B
+# Virtual A/B
 $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota.mk)
 
-# Configure SDCard replacement functionality
+# SDCard replacement / emulated storage
 $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 
-# Configure twrp
+# TWRP common configuration
 $(call inherit-product, vendor/twrp/config/common.mk)
 
-PRODUCT_PACKAGES += adbd.vendor_ramdisk
+# ADB in vendor ramdisk
+PRODUCT_PACKAGES += \
+    adbd.vendor_ramdisk
 
 # Требуеться для firstage -------------------------------#
-PRODUCT_PACKAGES += linker.vendor_ramdisk                #
-PRODUCT_PACKAGES += linker_hwasan64.vendor_ramdisk       #
-PRODUCT_PACKAGES += resize2fs.vendor_ramdisk             #
-PRODUCT_PACKAGES += resize.f2fs.vendor_ramdisk           #
-PRODUCT_PACKAGES += dump.f2fs.vendor_ramdisk             #
-PRODUCT_PACKAGES += defrag.f2fs.vendor_ramdisk           #
-PRODUCT_PACKAGES += fsck.vendor_ramdisk                  #
-PRODUCT_PACKAGES += tune2fs.vendor_ramdisk               #
-PRODUCT_PACKAGES += fstab.zuma.vendor_ramdisk            #
-PRODUCT_PACKAGES += fstab.zuma-fips.vendor_ramdisk       #
-PRODUCT_PACKAGES += e2fsck.vendor_ramdisk                #
+PRODUCT_PACKAGES += \
+    linker.vendor_ramdisk \
+    linker_hwasan64.vendor_ramdisk \
+    resize2fs.vendor_ramdisk \
+    resize.f2fs.vendor_ramdisk \
+    dump.f2fs.vendor_ramdisk \
+    defrag.f2fs.vendor_ramdisk \
+    fsck.vendor_ramdisk \
+    tune2fs.vendor_ramdisk \
+    fstab.zuma.vendor_ramdisk \
+    fstab.zuma-fips.vendor_ramdisk \
+    e2fsck.vendor_ramdisk
 # Требуеться для firstage -------------------------------#
 
-
-# A/B
+# A/B postinstall configuration
 AB_OTA_POSTINSTALL_CONFIG += \
     RUN_POSTINSTALL_system=true \
     POSTINSTALL_PATH_system=system/bin/otapreopt_script \
@@ -50,20 +53,17 @@ AB_OTA_POSTINSTALL_CONFIG += \
 
 PRODUCT_PACKAGES += \
     otapreopt_script
-    
-PRODUCT_PACKAGES += \
-    vndservicemanager
-    
-PRODUCT_PACKAGES += \
-    vndservice
-    
-# Hindl
 
+PRODUCT_PACKAGES += \
+    vndservicemanager \
+    vndservice
+
+# HIDL
 PRODUCT_PACKAGES += \
     libhidltransport.vendor \
     libhwbinder.vendor
 
-# Bootctrl
+# Boot control
 PRODUCT_PACKAGES += \
     bootctrl.stone.recovery \
     android.hardware.boot@1.1-impl-qti.recovery
@@ -71,23 +71,22 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES_DEBUG += \
     bootctl
 
-# SHIPPING API
+# Shipping / VNDK API levels
 PRODUCT_SHIPPING_API_LEVEL := 30
-
-# VNDK API
 PRODUCT_TARGET_VNDK_VERSION := 31
 
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
-    $(DEVICE_PATH)
+    $(DEVICE_PATH) \
+    vendor/qcom/opensource/commonsys-intf/display
 
 PRODUCT_USE_DYNAMIC_PARTITIONS := true
 
-# Kernel
+# Kernel / TWRP-required modules
 TWRP_REQUIRED_MODULES += \
-	miui_prebuilt
+    miui_prebuilt
 
-# Twrp Decryption
+# TWRP decryption
 PRODUCT_PACKAGES += \
     qcom_decrypt \
     qcom_decrypt_fbe
@@ -106,24 +105,15 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES_DEBUG += \
     update_engine_client
 
-# Soong Namespaces : Qcom commonsys Display
-PRODUCT_SOONG_NAMESPACES += \
-    vendor/qcom/opensource/commonsys-intf/display \
-    $(DEVICE_PATH) 
-
-# Misc.
+# Recovery device modules
 TARGET_RECOVERY_DEVICE_MODULES += \
     libdisplayconfig.qti \
     libion \
     vendor.display.config@1.0 \
-    vendor.display.config@2.0 \
-    libdisplayconfig.qti 
-    
-    
-# TWRP haptic feedback 
+    vendor.display.config@2.0
 
+# TWRP haptic feedback (AIDL input haptics)
 TW_SUPPORT_INPUT_AIDL_HAPTICS := true
-
 
 RECOVERY_LIBRARY_SOURCE_FILES += \
     $(TARGET_OUT_SHARED_LIBRARIES)/libion.so \
