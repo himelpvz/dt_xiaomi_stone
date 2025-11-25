@@ -98,6 +98,7 @@ BOARD_KERNEL_IMAGE_NAME := Image
 #TARGET_KERNEL_SOURCE := kernel/xiaomi/stone
 
 # Kernel - prebuilt
+BOARD_PREBUILT_DTBIMAGE_DIR := $(DEVICE_PATH)/prebuilt
 TARGET_PREBUILT_DTB := $(DEVICE_PATH)/prebuilt/dtb.img
 BOARD_MKBOOTIMG_ARGS += --dtb $(TARGET_PREBUILT_DTB)
 # 
