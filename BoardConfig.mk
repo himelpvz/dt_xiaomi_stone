@@ -98,11 +98,11 @@ BOARD_KERNEL_IMAGE_NAME := Image
 #TARGET_KERNEL_SOURCE := kernel/xiaomi/stone
 
 # Kernel - prebuilt
-
+TARGET_PREBUILT_DTB := $(DEVICE_PATH)/prebuilt/dtb.img
+BOARD_MKBOOTIMG_ARGS += --dtb $(TARGET_PREBUILT_DTB)
 # 
 #TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/kernel
-TARGET_PREBUILT_DTB := $(DEVICE_PATH)/prebuilt/dtb
-#BOARD_PREBUILT_DTBIMAGE_DIR := $(DEVICE_PATH)/prebuilt
+
 RAMDISK_SIZE := 22400240
 BOARD_MKBOOTIMG_ARGS += --vendor_ramdisk_size $(RAMDISK_SIZE)
 # Partitions
