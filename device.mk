@@ -39,8 +39,8 @@ PRODUCT_PACKAGES += \
     defrag.f2fs.vendor_ramdisk \
     fsck.vendor_ramdisk \
     tune2fs.vendor_ramdisk \
-    fstab.zuma.vendor_ramdisk \
-    fstab.zuma-fips.vendor_ramdisk \
+    fstab.holi.vendor_ramdisk \
+    fstab.holi-fips.vendor_ramdisk \
     e2fsck.vendor_ramdisk
 # Требуеться для firstage -------------------------------#
 
@@ -72,7 +72,7 @@ PRODUCT_PACKAGES_DEBUG += \
     bootctl
 
 # Shipping / VNDK API levels
-PRODUCT_SHIPPING_API_LEVEL := 30
+PRODUCT_SHIPPING_API_LEVEL := 31
 PRODUCT_TARGET_VNDK_VERSION := 31
 
 # Soong namespaces
