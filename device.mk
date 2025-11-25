@@ -24,6 +24,8 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 # Configure twrp
 $(call inherit-product, vendor/twrp/config/common.mk)
 
+PRODUCT_PACKAGES += adbd.vendor_ramdisk
+
 # Требуеться для firstage -------------------------------#
 PRODUCT_PACKAGES += linker.vendor_ramdisk                #
 PRODUCT_PACKAGES += linker_hwasan64.vendor_ramdisk       #
