@@ -1,50 +1,19 @@
 #
-# Copyright (C) 2025 The Android Open Source Project
-# Copyright (C) 2025 SebaUbuntu's TWRP device tree generator
-#
+# Copyright (C) 2023-2024
 # SPDX-License-Identifier: Apache-2.0
 #
 
-DEVICE_PATH := device/xiaomi/stone
+LOCAL_PATH := $(call my-dir)
 
-# Base product configuration
-$(call inherit-product, $(SRC_TARGET_DIR)/product/base.mk)
+# -----------------------------------------------------------------------------
+# Base inherit: Qualcomm common, storage, dalvik, A/B with vendor_ramdisk
+# -----------------------------------------------------------------------------
 
-# 64-bit only configuration (defines ro.zygote=zygote64)
-$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
 
-# GSI keys
-$(call inherit-product, $(SRC_TARGET_DIR)/product/gsi_keys.mk)
-
-# Virtual A/B
-$(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota.mk)
-
-# SDCard replacement / emulated storage
-$(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
-
-# TWRP common configuration
+# Configure twrp
 $(call inherit-product, vendor/twrp/config/common.mk)
 
-# ADB in vendor ramdisk
-PRODUCT_PACKAGES += \
-    adbd.vendor_ramdisk
-
-# Требуеться для firstage -------------------------------#
-PRODUCT_PACKAGES += \
-    linker.vendor_ramdisk \
-    linker_hwasan64.vendor_ramdisk \
-    resize2fs.vendor_ramdisk \
-    resize.f2fs.vendor_ramdisk \
-    dump.f2fs.vendor_ramdisk \
-    defrag.f2fs.vendor_ramdisk \
-    fsck.vendor_ramdisk \
-    tune2fs.vendor_ramdisk \
-    fstab.holi.vendor_ramdisk \
-    fstab.holi-fips.vendor_ramdisk \
-    e2fsck.vendor_ramdisk
-# Требуеться для firstage -------------------------------#
-
-# A/B postinstall configuration
+# A/B
 AB_OTA_POSTINSTALL_CONFIG += \
     RUN_POSTINSTALL_system=true \
     POSTINSTALL_PATH_system=system/bin/otapreopt_script \
@@ -54,69 +23,103 @@ AB_OTA_POSTINSTALL_CONFIG += \
 PRODUCT_PACKAGES += \
     otapreopt_script
 
-PRODUCT_PACKAGES += \
-    vndservicemanager \
-    vndservice
+# QCOM common definitions
+$(call inherit-product, hardware/qcom-caf/common/common.mk)
 
-# HIDL
-PRODUCT_PACKAGES += \
-    libhidltransport.vendor \
-    libhwbinder.vendor
+# Emulated storage (no sdcardfs)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 
-# Boot control
-PRODUCT_PACKAGES += \
-    bootctrl.stone.recovery \
-    android.hardware.boot@1.1-impl-qti.recovery
+# Dalvik VM configs
+$(call inherit-product, frameworks/native/build/phone-xhdpi-6144-dalvik-heap.mk)
 
-PRODUCT_PACKAGES_DEBUG += \
-    bootctl
+# A/B (virtual A/B, vendor ramdisk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/launch_with_vendor_ramdisk.mk)
 
-# Shipping / VNDK API levels
-PRODUCT_SHIPPING_API_LEVEL := 31
-PRODUCT_TARGET_VNDK_VERSION := 31
+# -----------------------------------------------------------------------------
+# Display / screen
+# -----------------------------------------------------------------------------
 
-# Soong namespaces
-PRODUCT_SOONG_NAMESPACES += \
-    $(DEVICE_PATH) \
-    vendor/qcom/opensource/commonsys-intf/display
+TARGET_SCREEN_HEIGHT := 2400
+TARGET_SCREEN_WIDTH := 1080
+
+# -----------------------------------------------------------------------------
+# Dynamic partitions
+# -----------------------------------------------------------------------------
 
 PRODUCT_USE_DYNAMIC_PARTITIONS := true
 
-# Kernel / TWRP-required modules
-TWRP_REQUIRED_MODULES += \
-    miui_prebuilt
+# -----------------------------------------------------------------------------
+# Fastbootd / bootctrl / OTA engine (useful for modern recoveries incl. TWRP)
+# -----------------------------------------------------------------------------
 
-# TWRP decryption
 PRODUCT_PACKAGES += \
-    qcom_decrypt \
-    qcom_decrypt_fbe
-
-# Fastbootd
-PRODUCT_PACKAGES += \
-    android.hardware.fastboot@1.0-impl-mock \
+    android.hardware.boot-service.qti \
+    android.hardware.boot-service.qti.recovery \
     fastbootd
 
-# Update engine
 PRODUCT_PACKAGES += \
     update_engine \
     update_engine_sideload \
     update_verifier
 
-PRODUCT_PACKAGES_DEBUG += \
-    update_engine_client
+# -----------------------------------------------------------------------------
+# Health (battery) in recovery
+# -----------------------------------------------------------------------------
 
-# Recovery device modules
-TARGET_RECOVERY_DEVICE_MODULES += \
-    libdisplayconfig.qti \
-    libion \
-    vendor.display.config@1.0 \
-    vendor.display.config@2.0
+PRODUCT_PACKAGES += \
+    android.hardware.health-service.qti \
+    android.hardware.health-service.qti_recovery
 
-# TWRP haptic feedback (AIDL input haptics)
-TW_SUPPORT_INPUT_AIDL_HAPTICS := true
+# -----------------------------------------------------------------------------
+# Device-specific init / libinit
+# -----------------------------------------------------------------------------
+
+# Custom recovery init for this device
+PRODUCT_PACKAGES += \
+    init_xiaomi_stone.recovery
+
+# libinit config (for vendor init lib)
+$(call soong_config_set,libinit,vendor_init_lib,//$(LOCAL_PATH):init_xiaomi_stone)
+
+# -----------------------------------------------------------------------------
+# Rootdir / fstab for first stage mount (critical for TWRP/any recovery)
+# -----------------------------------------------------------------------------
+
+PRODUCT_PACKAGES += \
+    charger_fstab.qti \
+    fstab.default \
+    init.qcom.rc \
+    init.qti.display_boot.rc \
+    init.qti.kernel.rc \
+    init.recovery.qcom.rc \
+    init.target.rc \
+    ueventd.qcom.rc
+
+# Ensure fstab is present in both recovery and vendor_ramdisk first_stage_ramdisk
+
+# -----------------------------------------------------------------------------
+# Shipping API level
+# -----------------------------------------------------------------------------
+
+PRODUCT_SHIPPING_API_LEVEL := 31
+
+# -----------------------------------------------------------------------------
+# Soong namespaces
+# -----------------------------------------------------------------------------
+
+PRODUCT_SOONG_NAMESPACES += \
+    $(LOCAL_PATH) \
+    hardware/xiaomi \
+    hardware/qcom-caf/common/libqti-perfd-client \
+    vendor/qcom/opensource/usb/etc
+
+# -----------------------------------------------------------------------------
+# Inherit vendor blobs
+# -----------------------------------------------------------------------------
 
 RECOVERY_LIBRARY_SOURCE_FILES += \
     $(TARGET_OUT_SHARED_LIBRARIES)/libion.so \
     $(TARGET_OUT_SYSTEM_EXT_SHARED_LIBRARIES)/libdisplayconfig.qti.so \
     $(TARGET_OUT_SYSTEM_EXT_SHARED_LIBRARIES)/vendor.display.config@1.0.so \
-    $(TARGET_OUT_SYSTEM_EXT_SHARED_LIBRARIES)/vendor.display.config@2.0.so
+    $(TARGET_OUT_SYSTEM_EXT_SHARED_LIBRARIES)/vendor.display.config@2.0.so    
+    
