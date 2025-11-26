@@ -9,6 +9,9 @@ PRODUCT_RELEASE_NAME := stone
 DEVICE_PATH := device/xiaomi/$(PRODUCT_RELEASE_NAME)
 
 
+# QCOM common definitions
+$(call inherit-product, hardware/qcom-caf/common/common.mk)
+
 $(call inherit-product, $(DEVICE_PATH)/device.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/base.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
@@ -20,6 +23,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/developer_gsi_keys.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/generic_ramdisk.mk)
 $(call inherit-product, vendor/twrp/config/common.mk)
+
 # Boot animation
 TARGET_SCREEN_HEIGHT := 2400
 TARGET_SCREEN_WIDTH := 1080
