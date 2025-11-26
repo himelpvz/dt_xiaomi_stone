@@ -122,7 +122,7 @@ TW_INCLUDE_REPACKTOOLS := true
 TW_INCLUDE_RESETPROP := true
 TW_INCLUDE_LIBRESETPROP := true
 TW_FRAMERATE := 120
-TW_LOAD_VENDOR_MODULES := "adsp_loader_dlkm.ko"
+
 TW_LOAD_VENDOR_BOOT_MODULES := true
 TW_CUSTOM_CPU_TEMP_PATH := "/sys/class/thermal/thermal_zone28/temp"
 TW_BATTERY_SYSFS_WAIT_SECONDS := 5
@@ -131,7 +131,7 @@ TW_BACKUP_EXCLUSIONS := /data/fonts
 # TWRP Debug Flags
 TWRP_INCLUDE_LOGCAT := true
 TARGET_USES_LOGD := true
-
+TW_DEVICE_VERSION := HpsTwrp
 # SHRP flags
 SHRP_PATH := device/xiaomi/stone
 SHRP_MAINTAINER := Himel_Pvz
