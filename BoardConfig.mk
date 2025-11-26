@@ -109,7 +109,7 @@ BOARD_XIAOMI_DYNAMIC_PARTITIONS_SIZE := 9122611200 # TODO: Fix hardcoded value
 # ===============
 # BOOTIMG 
 # ===============
-BOARD_USES_RECOVERY_AS_BOOT :=
+
 
 BOARD_MKBOOTIMG_ARGS += --dtb $(TARGET_PREBUILT_DTB)
 BOARD_INCLUDE_DTB_IN_BOOTIMG := true
@@ -136,8 +136,6 @@ TARGET_USERIMAGES_USE_F2FS := true
 # ===============
 # system prop called 
 # ===============
-
-TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
 
 # ===============
 # Security patch level
@@ -203,7 +201,7 @@ TW_INPUT_BLACKLIST := "hbtp_vm"
 
 TW_EXCLUDE_APEX := true
 
-TW_HAS_EDL_MODE := false
+TW_HAS_EDL_MODE := true
 
 TW_INCLUDE_REPACKTOOLS := true
 
@@ -212,8 +210,6 @@ TW_INCLUDE_RESETPROP := true
 TW_INCLUDE_LIBRESETPROP := true
 
 TW_FRAMERATE := 120
-
-TW_LOAD_VENDOR_MODULES := "adsp_loader_dlkm.ko"
 
 TW_CUSTOM_CPU_TEMP_PATH := "/sys/class/thermal/thermal_zone28/temp"
 
