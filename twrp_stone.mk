@@ -10,7 +10,6 @@ DEVICE_PATH := device/xiaomi/$(PRODUCT_RELEASE_NAME)
 
 
 # QCOM common definitions
-$(call inherit-product, hardware/qcom-caf/common/common.mk)
 
 $(call inherit-product, $(DEVICE_PATH)/device.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/base.mk)
