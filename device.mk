@@ -23,9 +23,6 @@ AB_OTA_POSTINSTALL_CONFIG += \
 PRODUCT_PACKAGES += \
     otapreopt_script
 
-# QCOM common definitions
-$(call inherit-product, hardware/qcom-caf/common/common.mk)
-
 # Emulated storage (no sdcardfs)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 
